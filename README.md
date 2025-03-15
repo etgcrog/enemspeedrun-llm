@@ -44,6 +44,7 @@ Este documento constitui o acordo completo entre o Usuário e os Autores em rela
 
 # Tricks 
 
+## Install PHP & Depedences
 Remove-Item -Recurse -Force vendor, composer.lock
 composer clear-cache
 
@@ -58,9 +59,12 @@ php yii migrate --interactive=0
 php yii serve --port=8000
 
 
+## DATABASE
+psql -U admin -d enemspeedrun
+
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
-REFEREN:
+## REFEREN:
 
 https://medium.com/@danushidk507/using-pymupdf4llm-a-practical-guide-for-pdf-extraction-in-llm-rag-environments-63649915abbf

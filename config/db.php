@@ -4,7 +4,7 @@ $environment = Dotenv\Dotenv::createUnsafeMutable(__DIR__ . '/..')->load();
 $dbName = $environment['POSTGRESQL_DATABASE'];
 $dbUsername = $environment['POSTGRESQL_USERNAME'];
 $dbPassword = $environment['POSTGRESQL_PASSWORD'];
-$host = "database";
+$host = "localhost";
 
 if (YII_ENV_PROD) {
     return [

@@ -13,35 +13,54 @@ class m240217_031802_add_2022_questions extends Migration
      */
     public function safeUp()
     {
-        $questions = array_slice(json_decode(file_get_contents(Yii::getAlias('@app') . '/raw/2022/question_levels.json'), true), 1);
-        foreach ($questions as $question) {
+        $competencies = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\question_levels.json'), true);
+        $questions = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\questoes_enem_2022_ML.json'), true);
+
+        $questions_map = [];
+        foreach ($questions as $q) {
+            $questions_map[$q['numero']] = $q;
+        }
+
+        foreach ($competencies as $question) {
+            $numero = (string)$question[0]; // CO_POSICAO
+
+            if (!isset($questions_map[$numero])) {
+                continue;
+            }
+
+            $question_data = $questions_map[$numero];
+
+            $existing = EnemQuestion::find()
+                ->where(['position' => $question[0], 'year' => 2022])
+                ->exists();
+
+            if ($existing) {
+                continue;
+            }
+
+            $alternatives_json = !empty($question_data['alternativas']) && is_array($question_data['alternativas'])
+                ? json_encode($question_data['alternativas'], JSON_UNESCAPED_UNICODE)
+                : null;
 
             $enemQuestion = new EnemQuestion();
             $enemQuestion->attributes = [
                 'position' => $question[0],
+                'title' => $question_data['titulo'],
+                'statement' => $question_data['enunciado'],
+                'question' => $question_data['pergunta'],
+                'alternatives' => $alternatives_json,
                 'answer' => $question[2],
+                'bibliography' => $question_data['bibliografia'] ?? null,
+                'images' => !empty($question_data['imagens']) ? json_encode($question_data['imagens']) : null,
                 'difficulty' => $question[4],
                 'exam_code' => $question[5],
                 'year' => 2022,
-                'language' => ($question[6] === '1') ? 1 : (($question[6] === '0') ? 2 : null),
-                'enem_area_competence_skill_id' => Yii::$app->db->createCommand(<<<SQL
-                    SELECT DISTINCT enem_area_competence_skill.id
-                    FROM 
-                        enem_area_competence_skill
-                        INNER JOIN enem_area_competence ON enem_area_competence.id = enem_area_competence_skill.enem_area_competence_id
-                        INNER JOIN enem_area ON enem_area.id = enem_area_competence.enem_area_id
-                    WHERE 
-                        enem_area.id = :ENEM_AREA_ID AND                        
-                        enem_area_competence_skill.code = :CODE
-                    LIMIT 1;
-                SQL
-                )
-                    ->bindValue(':ENEM_AREA_ID', $question[1], PDO::PARAM_STR)
-                    ->bindValue(':CODE', $question[3], PDO::PARAM_INT)
-                    ->queryScalar()
+                'language' => isset($question[6]) ? intval($question[6]) : null,
+                'enem_area_competence_skill_id' => $question[3] ?? null,
             ];
+
             if (!$enemQuestion->save()) {
-                throw new \yii\base\ErrorException("Não foi possível adicionar a questão do enem, detalhes: " . json_encode($enemQuestion->getErrors(), JSON_PRETTY_PRINT));
+                throw new \yii\base\ErrorException("Erro ao inserir questão: " . json_encode($enemQuestion->errors));
             }
         }
     }
@@ -52,22 +71,6 @@ class m240217_031802_add_2022_questions extends Migration
     public function safeDown()
     {
         echo "m240217_031802_add_2022_questions cannot be reverted.\n";
-
         return false;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m240217_031802_add_2022_questions cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
