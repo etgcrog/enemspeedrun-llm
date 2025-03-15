@@ -22,7 +22,9 @@ class m240217_031802_add_2022_questions extends Migration
         }
 
         foreach ($competencies as $question) {
-            $numero = (string)$question[0]; // CO_POSICAO
+            
+            // Corrigido aqui!
+            $numero = str_pad((string) intval($question[0]), 2, '0', STR_PAD_LEFT);
 
             if (!isset($questions_map[$numero])) {
                 continue;
@@ -30,6 +32,7 @@ class m240217_031802_add_2022_questions extends Migration
 
             $question_data = $questions_map[$numero];
 
+            // Evita duplicação (se desejar, pode comentar para testar)
             $existing = EnemQuestion::find()
                 ->where(['position' => $question[0], 'year' => 2022])
                 ->exists();
@@ -38,29 +41,27 @@ class m240217_031802_add_2022_questions extends Migration
                 continue;
             }
 
-            $alternatives_json = !empty($question_data['alternativas']) && is_array($question_data['alternativas'])
-                ? json_encode($question_data['alternativas'], JSON_UNESCAPED_UNICODE)
-                : null;
+            $alternatives_json = !empty($question_data['alternativas']) ? json_encode($question_data['alternativas'], JSON_UNESCAPED_UNICODE) : json_encode([]);
 
             $enemQuestion = new EnemQuestion();
             $enemQuestion->attributes = [
                 'position' => $question[0],
-                'title' => $question_data['titulo'],
-                'statement' => $question_data['enunciado'],
-                'question' => $question_data['pergunta'],
+                'title' => $question_data['titulo'] ?? 'Sem título',
+                'statement' => $question_data['enunciado'] ?? 'Sem enunciado',
+                'question' => $question_data['pergunta'] ?? 'Sem pergunta',
                 'alternatives' => $alternatives_json,
                 'answer' => $question[2],
-                'bibliography' => $question_data['bibliografia'] ?? null,
-                'images' => !empty($question_data['imagens']) ? json_encode($question_data['imagens']) : null,
-                'difficulty' => $question[4],
-                'exam_code' => $question[5],
+                'bibliography' => $question_data['bibliografia'] ?? '',
+                'images' => !empty($question_data['imagens']) ? json_encode($question_data['imagens']) : json_encode([]),
+                'difficulty' => isset($question[4]) && is_numeric($question[4]) ? floatval($question[4]) : 0.0,
+                'exam_code' => $question[5] ?? 0,
                 'year' => 2022,
-                'language' => isset($question[6]) ? intval($question[6]) : null,
+                'language' => isset($question[6]) && $question[6] !== "" ? intval($question[6]) : null,
                 'enem_area_competence_skill_id' => $question[3] ?? null,
             ];
 
             if (!$enemQuestion->save()) {
-                throw new \yii\base\ErrorException("Erro ao inserir questão: " . json_encode($enemQuestion->errors));
+                throw new \yii\base\ErrorException("Erro ao inserir questão: " . json_encode($enemQuestion->errors, JSON_PRETTY_PRINT));
             }
         }
     }
