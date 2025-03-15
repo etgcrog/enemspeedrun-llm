@@ -36,8 +36,7 @@ pdf_path = r"raw\2022\exams\P1\dia1.pdf"
 doc = fitz.open(pdf_path)
 
 # Criar diretório para salvar imagens extraídas
-image_output_folder = "imagens_enem"
-os.makedirs(image_output_folder, exist_ok=True)
+image_output_folder = "web\imgs"
 
 # 🏁 Processar páginas
 start_page = 6
@@ -56,7 +55,7 @@ def extrair_imagens(doc):
             image_bytes = base_image["image"]
 
             img_filename = f"questao_{page_num+1}_{img_index+1}.png"
-            img_path = os.path.join("imagens_enem", img_filename)
+            img_path = os.path.join(image_output_folder, img_filename)
             img_full_path = os.path.abspath(img_path)
 
             with open(img_full_path, "wb") as img_file:
@@ -138,7 +137,7 @@ if questao_atual:
         questao_atual["alternativas"][alt] = questao_atual["alternativas"][alt].rstrip(" /,.")
     questoes.append(questao_atual)
 
-json_file_path = r"C:\Users\etgcr\Documents\enemspeedrun\questoes_enem_2022_ML.json"
+json_file_path = r"C:\Users\etgcr\enemspeedrun-llm\raw\2022\questoes_enem_2022_ML.json"
 with open(json_file_path, "w", encoding="utf-8") as json_file:
     json.dump(questoes, json_file, indent=4, ensure_ascii=False)
 
