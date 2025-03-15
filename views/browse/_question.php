@@ -38,36 +38,11 @@ HtmxAsset::register($this);
     </div>
     <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700"/>
     <div class="flex flex-col px-4 py-2">
-        <p class="text-xs text-normal max-lines-4 ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec est eu justo mollis commodo. Donec at
-            metus eget velit feugiat malesuada nec et nulla. Sed nec nisi id sem blandit rutrum. Ut interdum tincidunt
-            ex, sit amet lacinia leo feugiat id. Vestibulum non luctus purus. Nullam nec erat ut dui interdum rutrum.
-            Vivamus id risus id orci convallis bibendum. Nulla facilisi. Quisque eget lorem scelerisque, vestibulum nisl
-            ut, interdum risus. Curabitur lobortis, augue eget vestibulum suscipit, metus enim tincidunt ipsum, eget
-            suscipit purus metus ac lectus. Ut tempus, ex a dapibus posuere, velit eros finibus enim, nec convallis leo
-            ligula non ex. Suspendisse lacinia enim sit amet leo iaculis, eget sodales justo gravida. Donec quis leo
-            vehicula, dignissim ante sit amet, ultricies odio. Nullam lacinia orci non purus malesuada tempus.
-            Phasellus vestibulum erat id felis malesuada, a ultrices leo ultricies. Cras ullamcorper, elit quis
-            fringilla elementum, mauris ipsum tristique nisl, vel commodo quam nulla ac ipsum. Nulla facilisi. Mauris
-            placerat malesuada metus, ut aliquam arcu lobortis nec. Nam suscipit nec arcu nec ullamcorper. Sed eget
-            nulla nec sapien facilisis tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada
-            fames ac turpis egestas. Ut suscipit lacinia tortor. Nullam id efficitur tortor, a euismod lectus. Sed
-            dapibus ipsum nec mauris lacinia, vel egestas odio posuere. Cras accumsan sapien vitae elit tempus, eget
-            vehicula nunc blandit.
-            Pellentesque commodo, neque in fermentum malesuada, odio purus varius ex, ac vulputate purus lacus id nulla.
-            Vivamus pretium vitae ex vitae varius. Morbi sollicitudin, lacus non placerat placerat, orci odio rutrum
-            arcu, vel euismod dui mauris id tortor. Ut nec orci est. Cras luctus quam non dolor placerat ultricies. Sed
-            congue mauris vel ligula laoreet, vitae dictum leo tempor. Aenean vestibulum arcu ac ipsum lobortis, quis
-            cursus metus dapibus. Vivamus nec elit in odio ultrices accumsan nec vel lectus. Vivamus pulvinar sodales
-            massa, eget gravida nisi vestibulum non. Aenean vel felis sed nulla tristique venenatis. Vestibulum ante
-            ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer ac libero tortor. Sed vitae
-            tortor neque. Vestibulum at varius nisi, ac fermentum urna.
-            Aliquam erat volutpat. Pellentesque placerat nunc a est dictum, vel efficitur dui suscipit. Vestibulum vel
-            ipsum in purus consectetur tristique nec sit amet eros. Cras vestibulum tincidunt nisl, vitae tincidunt
-            nulla varius sed. Sed tempus turpis sit amet nunc finibus, eu auctor velit egestas. Mauris vitae felis eget
-            ante rhoncus egestas a vitae ex. Sed
+        <p class="text-xs text-normal max-lines-4">
+            <?= \yii\helpers\Html::encode($model->statement) ?>
         </p>
     </div>
+
     <div class="px-2 py-2">
         <a href="<?= Url::to(['/browse/view', 'id' => $model->getPrimaryKey()]) ?>"
            hx-boost="true"

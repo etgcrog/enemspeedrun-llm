@@ -12,6 +12,8 @@ use yii\helpers\Url;
 HtmxAsset::register($this);
 $submitIndicatorId = 'alternative-submit-indicator';
 
+$questionAlternatives = json_decode($question->alternatives, true);
+
 ?>
 
     <section id="alternatives" class="flex flex-col gap-1 w-full">
@@ -40,34 +42,21 @@ $submitIndicatorId = 'alternative-submit-indicator';
             </template>
         </div>
         <ul class="px-2 list-inside dark:text-gray-400">
-            <?php foreach (EnemQuestionAccountAnswerForm::ALTERNATIVES as $alternative): ?>
+            <?php foreach ($questionAlternatives as $letter => $alternativeText): ?>
                 <li class="flex items-start gap-4 py-2 px-1 my-2 rounded cursor-pointer"
-                    data-question-alternative="<?= $alternative ?>">
+                    data-question-alternative="<?= $letter ?>">
                     <div class="flex flex-row gap-1">
-                        <button class="opacity-0 flex flex-row gap-1 items-center text-gray-600 px-2 py-1"
-                                role="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664"/>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-                            </svg>
+                        <button class="opacity-0 flex flex-row gap-1 items-center text-gray-600 px-2 py-1" role="button">
+                            <!-- SVGs aqui -->
                         </button>
                         <button type="button"
                                 role="button"
                                 class="text-lg inline-flex items-center justify-center w-6 h-6 p-4 rounded-full text-sm font-semibold text-gray-800 bg-gray-100 border-gray-300 border dark:bg-gray-700 dark:text-gray-300">
-                            <?= $alternative ?>
+                            <?= $letter ?>
                         </button>
                     </div>
                     <p class="text-sm font-semibold text-gray-600 tracking-tighter">
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                        laudantium,
-                        totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                        dicta sunt explicabo.
+                        <?= \yii\helpers\Html::encode($alternativeText) ?>
                     </p>
                 </li>
             <?php endforeach; ?>

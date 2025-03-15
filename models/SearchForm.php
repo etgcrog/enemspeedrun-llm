@@ -42,7 +42,7 @@ class SearchForm extends Model
         $query->innerJoin('enem_area_competence', 'enem_area_competence.id = enem_area_competence_skill.enem_area_competence_id');
         $query->innerJoin('enem_area', 'enem_area.id = enem_area_competence.enem_area_id');
         if (!empty($this->term) && $this->validate('term')) {
-            $query->andWhere(new Expression("enem_question.question ilike :term"), [':term' => $this->term]);
+            $query->andWhere(['ilike', 'enem_question.statement', $this->term]);
         }
         if (!empty($this->area) && $this->validate('area')) {
             $query->andWhere(['in', 'enem_area.id', $this->area]);

@@ -5,5 +5,6 @@ composer.lock
 web/
 venv/
 BERT/modelo_bibliografia
+imagens_enem
 .venv/
 .env

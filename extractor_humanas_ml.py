@@ -56,12 +56,13 @@ def extrair_imagens(doc):
             image_bytes = base_image["image"]
 
             img_filename = f"questao_{page_num+1}_{img_index+1}.png"
-            img_path = os.path.join(image_output_folder, img_filename)
+            img_path = os.path.join("imagens_enem", img_filename)
+            img_full_path = os.path.abspath(img_path)
 
-            with open(img_path, "wb") as img_file:
+            with open(img_full_path, "wb") as img_file:
                 img_file.write(image_bytes)
 
-            imagens.append(img_filename)
+            imagens.append(img_full_path)
 
         if imagens:
             imagens_extraidas[page_num] = imagens
@@ -79,6 +80,7 @@ for page_num in range(start_page, end_page):
     text = page.get_text("text")
     linhas = text.split("\n")
     imagens_pagina = imagens_extraidas.get(page_num, [])
+    imagem_inserida = False
 
     for linha in linhas:
         linha_strip = linha.strip()
@@ -92,14 +94,14 @@ for page_num in range(start_page, end_page):
         if match_questao:
             if questao_atual:
                 questao_atual["bibliografia"] = "\n".join(bibliografias) if bibliografias else None
+                for alt in questao_atual["alternativas"]:
+                    questao_atual["alternativas"][alt] = questao_atual["alternativas"][alt].rstrip(" /,.")
                 questoes.append(questao_atual)
 
             questao_atual = {"numero": match_questao.group(1), "titulo": "", "enunciado": "", "pergunta": "", "alternativas": {}, "bibliografia": None, "imagens": imagens_pagina}
             bibliografias = []
             secao_atual = "enunciado"
-
-            if imagens_pagina:
-                questao_atual["enunciado"] += "[imagem] "
+            imagem_inserida = False
             continue
 
         if classificacao == "bibliografia":
@@ -117,17 +119,23 @@ for page_num in range(start_page, end_page):
 
         if secao_atual == "enunciado" or ('TEXTO' in linha_strip and secao_atual != "alternativas"):
             if questao_atual is not None:
-                questao_atual["enunciado"] += linha_strip + " "
+                if (linha_strip.startswith('TEXTO II') or linha_strip.startswith('TEXTO I')) and imagens_pagina and not imagem_inserida:
+                    questao_atual["enunciado"] += linha_strip + " [imagem] "
+                    imagem_inserida = True
+                else:
+                    questao_atual["enunciado"] += linha_strip + " "
             secao_atual = "enunciado"
         elif secao_atual == "pergunta":
             questao_atual["pergunta"] += linha_strip + " "
 
         if secao_atual == "alternativas":
             ultima_alternativa = list(questao_atual["alternativas"].keys())[-1]
-            questao_atual["alternativas"][ultima_alternativa] += linha_strip + " "
+            questao_atual["alternativas"][ultima_alternativa] += linha_strip.strip() + " "
 
 if questao_atual:
     questao_atual["bibliografia"] = "\n".join(bibliografias) if bibliografias else None
+    for alt in questao_atual["alternativas"]:
+        questao_atual["alternativas"][alt] = questao_atual["alternativas"][alt].rstrip(" /,.")
     questoes.append(questao_atual)
 
 json_file_path = r"C:\Users\etgcr\Documents\enemspeedrun\questoes_enem_2022_ML.json"
