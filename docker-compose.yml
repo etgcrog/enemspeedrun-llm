@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  database:
+    image: bitnami/postgresql:latest
+    container_name: enemspeedrun-database
+    volumes:
+      - pgdata:/bitnami/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: enemspeedrun
+    deploy:
+      resources:
+        limits:
+          memory: 1GB  # Limita o PostgreSQL a usar no máximo 2GB de RAM
+          cpus: "0.5"   # Limita a 1.5 núcleos de CPU
+
+volumes:
+  pgdata:

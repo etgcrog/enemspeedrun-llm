@@ -1,0 +1,8 @@
+vendor
+node_modules
+composer.lock
+.data
+web/
+venv/
+BERT/modelo_bibliografia
+.venv/
