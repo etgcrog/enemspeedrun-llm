@@ -1,0 +1,5 @@
+fitz
+pytesseract
+pdfplumber
+pdfminer.six
+pillow

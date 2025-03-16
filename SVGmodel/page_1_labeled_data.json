@@ -1,0 +1,65 @@
+[
+    {
+        "bbox": [
+            139,
+            60,
+            684,
+            377
+        ],
+        "label": "enunciado"
+    },
+    {
+        "bbox": [
+            176,
+            433,
+            371,
+            548
+        ],
+        "label": "alternativa_a"
+    },
+    {
+        "bbox": [
+            179,
+            555,
+            397,
+            650
+        ],
+        "label": "alternativa_b"
+    },
+    {
+        "bbox": [
+            188,
+            661,
+            370,
+            790
+        ],
+        "label": "alternativa_c"
+    },
+    {
+        "bbox": [
+            189,
+            799,
+            381,
+            887
+        ],
+        "label": "alternativa_d"
+    },
+    {
+        "bbox": [
+            187,
+            898,
+            359,
+            993
+        ],
+        "label": "alternativa_e"
+    },
+    {
+        "bbox": [
+            144,
+            382,
+            665,
+            413
+        ],
+        "label": "pergunta"
+    }
+]

@@ -67,4 +67,6 @@ CREATE SCHEMA public;
 
 ## REFEREN:
 
+https://pix2text.readthedocs.io/zh-cn/stable/examples_en/
+
 https://medium.com/@danushidk507/using-pymupdf4llm-a-practical-guide-for-pdf-extraction-in-llm-rag-environments-63649915abbf

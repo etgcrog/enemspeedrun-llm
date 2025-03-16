@@ -1,0 +1,30 @@
+{
+    "enunciado": {
+        "text": "A penicilamina é um medicamento de uso oral utilizado no tratamento de vári\ndoenças. Esse composto é excretado na urina, cujo pH se situa entre 5 e\nA penicilamina, cuja fórmula estrutural plana está apresentada, possui três grup\nfuncionais que podem ser ionizados:\ncarboxila: —COOH, cujo pK é igual a 1,8;\na\namino: —NH , que pode ser convertido em amínio (—NH +, cujo pK é igual a 7,9\n2 3 a\ntiol: —SH, cujo pK é igual a 10,5.\na\nSabe-se que pK = −log K .\na a\nCH H\n3\nHS C C COOH\nCH NH\n3 2\nPenicilamina",
+        "svg_path": "subareas_extraidas\\enunciado.svg"
+    },
+    "alternativa_a": {
+        "text": "CH H\n3\n− −\nS C C COO\nCH NH\n3 2",
+        "svg_path": "subareas_extraidas\\alternativa_a.svg"
+    },
+    "alternativa_b": {
+        "text": "CH H\n3\n−\nS C C COOH\nCH NH\n3 2",
+        "svg_path": "subareas_extraidas\\alternativa_b.svg"
+    },
+    "alternativa_c": {
+        "text": "CH H\n3\n−\nS C C COO\n+\nCH NH\n3 3",
+        "svg_path": "subareas_extraidas\\alternativa_c.svg"
+    },
+    "alternativa_d": {
+        "text": "S C C COOH\n+\nCH NH\n3 3",
+        "svg_path": "subareas_extraidas\\alternativa_d.svg"
+    },
+    "alternativa_e": {
+        "text": "CH H\n3\nS C C COOH\n+\nCH NH\n3 3",
+        "svg_path": "subareas_extraidas\\alternativa_e.svg"
+    },
+    "pergunta": {
+        "text": "Qual estrutura derivada da penicilamina é predominantemente encontrada na urina?",
+        "svg_path": "subareas_extraidas\\pergunta.svg"
+    }
+}
