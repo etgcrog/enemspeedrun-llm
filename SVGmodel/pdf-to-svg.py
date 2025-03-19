@@ -1,115 +1,97 @@
 import os
-import subprocess
 import json
+import subprocess
 from pdf2image import convert_from_path
 from PIL import Image
 import pdfplumber
 
-# Caminho do Potrace
-potrace_path = r"potrace.exe"
+# 🔹 Caminho do Potrace
+potrace_path = r"C:\Users\etgcr\enemspeedrun-llm\SVGmodel\potrace.exe"
 
-# Configuração global
+# 🔹 Configuração global
 dpi = 72  # Mantendo 1 ponto = 1 pixel
 output_folder = "subareas_extraidas"
 output_json_path = "subareas_convertidas.json"
-input_json_path = "page_1_labeled_data.json"  # 📌 Arquivo JSON com as coordenadas anotadas
-
-# Criar pasta de saída, se não existir
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-
-# Caminho do PDF e página específica
+input_json_path = r"C:\Users\etgcr\enemspeedrun-llm\SVGmodel\manual_classification\dataset\classified_data.json"
 pdf_path = r"C:\Users\etgcr\enemspeedrun-llm\raw\2022\exams\P2\dia2.pdf"
-page_number = 24  # Página a converter
 
-# 🔹 1️⃣ Obter tamanho exato da página no PDF (em pontos)
-with pdfplumber.open(pdf_path) as pdf:
-    pdf_page = pdf.pages[page_number - 1]
-    pdf_width, pdf_height = pdf_page.width, pdf_page.height
-    print(f"📄 Tamanho da página no PDF: {pdf_width}x{pdf_height} pontos")
+# 🔹 Criar pasta de saída, se não existir
+os.makedirs(output_folder, exist_ok=True)
 
-# 🔹 2️⃣ Converter PDF para imagem (1 ponto = 1 pixel)
-images = convert_from_path(pdf_path, first_page=page_number, last_page=page_number, dpi=dpi)
-image = images[0]
-image_path = os.path.join(output_folder, "page_1.png")
-image.save(image_path, "PNG")
-
-# 🔹 3️⃣ Verificar tamanho da imagem gerada
-image_width, image_height = image.size
-print(f"✅ Imagem gerada com tamanho: {image_width}x{image_height} pixels")
-
-# 🚀 Agora `pdf_width == image_width` e `pdf_height == image_height`, então NÃO precisamos de fator de escala.
-
-def extract_subarea_as_image(image, output_folder, area_name, bbox):
-    """
-    Recorta uma subárea específica da imagem e a salva como PNG.
-    """
-    cropped_image = image.crop(bbox)
-    output_image_path = os.path.join(output_folder, f"{area_name}.png")
-    cropped_image.save(output_image_path, "PNG")
-    print(f"✅ Imagem da subárea '{area_name}' salva: {output_image_path}")
-    return output_image_path
-
-def convert_image_to_svg(image_path, output_svg_path):
-    """
-    Converte uma imagem PNG ou BMP em SVG usando Potrace.
-    """
-    bmp_image_path = image_path.replace(".png", ".bmp")
-    with Image.open(image_path) as img:
-        img.save(bmp_image_path, "BMP")
-
-    subprocess.run([potrace_path, bmp_image_path, "-s", "-o", output_svg_path], check=True)
-    os.remove(bmp_image_path)
-
-    print(f"✅ SVG salvo: {output_svg_path}")
-    return output_svg_path
-
-def extract_text_from_area(pdf_path, page_number, bbox):
-    """
-    Extrai texto de uma subárea do PDF.
-    """
-    with pdfplumber.open(pdf_path) as pdf:
-        page = pdf.pages[page_number - 1]
-        text = page.within_bbox(bbox).extract_text()
-    return text
-
-# 🔹 4️⃣ 📌 **Carregar coordenadas do JSON**
+# 🔹 Carregar JSON com coordenadas anotadas
 with open(input_json_path, "r", encoding="utf-8") as json_file:
-    areas_pdf = json.load(json_file)
+    annotated_data = json.load(json_file)
 
-# Processar cada subárea
-data = {}
-for area in areas_pdf:
-    pdf_bbox = area["bbox"]
-    label = area["label"]
+# 🔹 Processar todas as páginas do JSON
+output_data = {}
 
-    # NÃO precisamos converter, pois já garantimos que 1 ponto = 1 pixel!
-    image_bbox = pdf_bbox  
+# 🔹 1️⃣ Abrir o PDF para pegar todas as páginas
+with pdfplumber.open(pdf_path) as pdf:
+    for page_key, areas in annotated_data.items():
+        # Extrair número da página
+        page_number = int(page_key.replace("page_", ""))
+        
+        # Verificar se a página existe no PDF
+        if page_number > len(pdf.pages):
+            print(f"⚠️ Página {page_number} não existe no PDF, pulando...")
+            continue
 
-    # Extrair a subárea da imagem
-    image_path = extract_subarea_as_image(image, output_folder, label, image_bbox)
+        print(f"\n📄 Processando Página {page_number}...")
 
-    # Converter a imagem em SVG
-    svg_path = image_path.replace(".png", ".svg")
-    convert_image_to_svg(image_path, svg_path)
+        # 🔹 2️⃣ Obter tamanho exato da página
+        pdf_page = pdf.pages[page_number - 1]
+        pdf_width, pdf_height = pdf_page.width, pdf_page.height
+        print(f"✅ Tamanho da página {page_number}: {pdf_width}x{pdf_height} pontos")
 
-    # Extrair texto diretamente do PDF
-    text = extract_text_from_area(pdf_path, page_number, pdf_bbox)
+        # 🔹 3️⃣ Converter página do PDF para imagem
+        images = convert_from_path(pdf_path, first_page=page_number, last_page=page_number, dpi=dpi)
+        image = images[0]
+        page_image_path = os.path.join(output_folder, f"page_{page_number}.png")
+        image.save(page_image_path, "PNG")
+        print(f"✅ Imagem da página {page_number} salva: {page_image_path}")
 
-    # Adicionar dados ao JSON
-    data[label] = {
-        "text": text,
-        "svg_path": svg_path
-    }
+        # 🔹 4️⃣ Processar cada anotação na página
+        page_data = []
 
-def save_to_json(output_json_path, data):
-    """
-    Salva os dados em um arquivo JSON.
-    """
-    with open(output_json_path, "w", encoding="utf-8") as json_file:
-        json.dump(data, json_file, indent=4, ensure_ascii=False)
+        for area in areas:
+            bbox = area["bbox"]
+            label = area["label"]
 
-    print(f"✅ JSON salvo: {output_json_path}")
+            print(f"🔍 Extraindo '{label}' da página {page_number}: {bbox}")
 
-# Salvar informações no JSON
-save_to_json(output_json_path, data)
+            # 🔹 Recortar a subárea e salvar como PNG
+            cropped_image = image.crop(bbox)
+            sub_image_path = os.path.join(output_folder, f"page_{page_number}_{label}.png")
+            cropped_image.save(sub_image_path, "PNG")
+            print(f"✅ Imagem da subárea '{label}' salva: {sub_image_path}")
+
+            # 🔹 Converter para SVG usando Potrace
+            svg_path = sub_image_path.replace(".png", ".svg")
+            bmp_image_path = sub_image_path.replace(".png", ".bmp")
+
+            with Image.open(sub_image_path) as img:
+                img.save(bmp_image_path, "BMP")
+
+            subprocess.run([potrace_path, bmp_image_path, "-s", "-o", svg_path], check=True)
+            os.remove(bmp_image_path)
+
+            print(f"✅ SVG salvo: {svg_path}")
+
+            # 🔹 Extrair texto da subárea no PDF
+            text = pdf_page.within_bbox(bbox).extract_text()
+
+            # 🔹 Adicionar os dados ao JSON
+            page_data.append({
+                "label": label,
+                "bbox": bbox,
+                "text": text.strip() if text else "",
+                "svg_path": svg_path
+            })
+
+        output_data[page_key] = page_data
+
+# 🔹 Salvar todas as informações no JSON final
+with open(output_json_path, "w", encoding="utf-8") as json_file:
+    json.dump(output_data, json_file, indent=4, ensure_ascii=False)
+
+print(f"\n✅ JSON salvo: {output_json_path}")

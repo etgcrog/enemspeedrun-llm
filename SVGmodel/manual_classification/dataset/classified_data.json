@@ -1,0 +1,524 @@
+{
+    "page_7": [
+        {
+            "bbox": [
+                134,
+                84,
+                708,
+                640
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                140,
+                648,
+                669,
+                672
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                137,
+                702,
+                269,
+                740
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                144,
+                748,
+                274,
+                790
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                146,
+                797,
+                284,
+                833
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                136,
+                841,
+                279,
+                874
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                147,
+                883,
+                288,
+                917
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_8": [
+        {
+            "bbox": [
+                135,
+                60,
+                710,
+                135
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                141,
+                139,
+                533,
+                168
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                147,
+                193,
+                387,
+                232
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                147,
+                240,
+                403,
+                272
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                152,
+                280,
+                416,
+                321
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                142,
+                328,
+                440,
+                367
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                145,
+                373,
+                474,
+                417
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_9": [
+        {
+            "bbox": [
+                136,
+                55,
+                699,
+                225
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                142,
+                235,
+                703,
+                273
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                150,
+                309,
+                275,
+                346
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                148,
+                358,
+                275,
+                389
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                147,
+                400,
+                273,
+                439
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                146,
+                447,
+                275,
+                476
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                149,
+                489,
+                269,
+                532
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_10": [
+        {
+            "bbox": [
+                138,
+                58,
+                710,
+                500
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                138,
+                508,
+                566,
+                535
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                145,
+                558,
+                488,
+                600
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                147,
+                607,
+                489,
+                646
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                146,
+                654,
+                501,
+                697
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                145,
+                703,
+                518,
+                735
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                149,
+                742,
+                533,
+                781
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_11": [],
+    "page_12": [],
+    "page_13": [
+        {
+            "bbox": [
+                131,
+                55,
+                724,
+                446
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                137,
+                456,
+                521,
+                486
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                143,
+                502,
+                527,
+                610
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                143,
+                616,
+                518,
+                713
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                146,
+                721,
+                522,
+                808
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                145,
+                825,
+                527,
+                921
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                143,
+                931,
+                513,
+                1095
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_14": [
+        {
+            "bbox": [
+                140,
+                58,
+                712,
+                310
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                140,
+                320,
+                716,
+                369
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                147,
+                397,
+                283,
+                439
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                152,
+                450,
+                301,
+                481
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                143,
+                492,
+                334,
+                524
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                141,
+                534,
+                345,
+                566
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                150,
+                582,
+                342,
+                616
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_15": [
+        {
+            "bbox": [
+                135,
+                55,
+                712,
+                218
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                139,
+                222,
+                592,
+                260
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                141,
+                278,
+                541,
+                318
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                145,
+                332,
+                566,
+                363
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                142,
+                373,
+                586,
+                413
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                142,
+                424,
+                589,
+                459
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                139,
+                467,
+                592,
+                497
+            ],
+            "label": "alternativa_e"
+        }
+    ],
+    "page_16": [
+        {
+            "bbox": [
+                137,
+                62,
+                713,
+                205
+            ],
+            "label": "enunciado"
+        },
+        {
+            "bbox": [
+                127,
+                170,
+                702,
+                214
+            ],
+            "label": "pergunta"
+        },
+        {
+            "bbox": [
+                146,
+                232,
+                684,
+                271
+            ],
+            "label": "alternativa_a"
+        },
+        {
+            "bbox": [
+                144,
+                277,
+                698,
+                334
+            ],
+            "label": "alternativa_b"
+        },
+        {
+            "bbox": [
+                148,
+                346,
+                710,
+                403
+            ],
+            "label": "alternativa_c"
+        },
+        {
+            "bbox": [
+                143,
+                412,
+                704,
+                465
+            ],
+            "label": "alternativa_d"
+        },
+        {
+            "bbox": [
+                143,
+                474,
+                696,
+                541
+            ],
+            "label": "alternativa_e"
+        }
+    ]
+}
