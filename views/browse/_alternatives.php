@@ -13,7 +13,7 @@ HtmxAsset::register($this);
 $submitIndicatorId = 'alternative-submit-indicator';
 
 $questionAlternatives = json_decode($question->alternatives, true);
-
+ksort($questionAlternatives);
 ?>
 
     <section id="alternatives" class="flex flex-col gap-1 w-full">
@@ -43,11 +43,11 @@ $questionAlternatives = json_decode($question->alternatives, true);
         </div>
         <ul class="px-2 list-inside dark:text-gray-400">
             <?php foreach ($questionAlternatives as $letter => $alternativeText): ?>
-                <li class="flex items-start gap-4 py-2 px-1 my-2 rounded cursor-pointer"
+                <li class="flex items-start gap-4 py-2 px-1 my-2 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
                     data-question-alternative="<?= $letter ?>">
                     <div class="flex flex-row gap-1">
                         <button class="opacity-0 flex flex-row gap-1 items-center text-gray-600 px-2 py-1" role="button">
-                            <!-- SVGs aqui -->
+                            <!-- botão de riscar, se aplicável -->
                         </button>
                         <button type="button"
                                 role="button"
@@ -55,12 +55,25 @@ $questionAlternatives = json_decode($question->alternatives, true);
                             <?= $letter ?>
                         </button>
                     </div>
-                    <p class="text-sm font-semibold text-gray-600 tracking-tighter">
-                        <?= \yii\helpers\Html::encode($alternativeText) ?>
-                    </p>
+                    <div class="text-sm font-semibold text-gray-600 tracking-tighter w-full overflow-hidden">
+                        <?php
+                        $decodedAlt = base64_decode($alternativeText, true);
+                        if ($decodedAlt && (str_starts_with($decodedAlt, '<svg') || str_starts_with($decodedAlt, '<?xml'))) {
+                            echo '<div class="w-full overflow-x-auto max-h-48 border rounded p-1 bg-white dark:bg-gray-800">'
+                                . $decodedAlt . '</div>';
+                        } elseif ($decodedAlt && str_starts_with($decodedAlt, "\x89PNG")) {
+                            echo '<img class="w-full max-h-48 object-contain border rounded p-1 bg-white dark:bg-gray-800" 
+                                src="data:image/png;base64,' . \yii\helpers\Html::encode($alternativeText) . '" 
+                                alt="Alternative Image"/>';
+                        } else {
+                            echo '<p>' . \yii\helpers\Html::encode($alternativeText) . '</p>';
+                        }
+                        ?>
+                    </div>
                 </li>
             <?php endforeach; ?>
         </ul>
+
 
         <?php if (Yii::$app->user->identity): ?>
             <?php if ($answerForm->answer !== null): ?>
@@ -194,7 +207,7 @@ $this->registerJs(<<<JS
     var alternativeLetterButtons = $('li[data-question-alternative] button:nth-child(2)');
     var alternativeButtonInitialText = alternativeButton.text();
     var lis = $('li[data-question-alternative]');
-    lis.children('button:nth-child(2), p').click(function() {
+    lis.children('button:nth-child(2), p, div, img').click(function() {
        lis.removeClass('bg-green-100 bg-red-100');  
         const li = $(this).closest('li[data-question-alternative]');
         const alternativeLetterButton = li.find('button:nth-child(2)');
@@ -232,6 +245,20 @@ JS
 );
 
 $this->registerCss(<<<CSS
+
+    #alternatives img,
+    #alternatives svg {
+        max-height: 10rem;
+        max-width: 50%;
+        object-fit: contain;
+        display: block;
+    }
+
+    #alternatives li {
+        transition: background-color 0.2s ease;
+        position: relative;
+    }
+
   .fade-in-left {
     opacity: 0;
     position: relative;
