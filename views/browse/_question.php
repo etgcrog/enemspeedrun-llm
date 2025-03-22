@@ -2,6 +2,7 @@
 
 use app\assets\HtmxAsset;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 /** @var \yii\web\View $this */
 /** @var \app\models\EnemQuestion $model */
@@ -17,11 +18,7 @@ HtmxAsset::register($this);
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
             </svg>
-            <?php if ($model->title): ?>
-                <?= $model->title ?>
-            <?php else: ?>
-                Sem título
-            <?php endif; ?>
+            <?= $model->title ?: 'Sem título' ?>
         </h2>
         <div class="flex flex-row items-center justify-end">
             <?= $this->render('_difficulty', ['difficulty' => $model->difficulty]) ?>
@@ -37,10 +34,23 @@ HtmxAsset::register($this);
         </div>
     </div>
     <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700"/>
+
     <div class="flex flex-col px-4 py-2">
-        <p class="text-xs text-normal max-lines-4">
-            <?= \yii\helpers\Html::encode($model->statement) ?>
-        </p>
+        <?php
+        $decodedStatement = base64_decode($model->statement, true);
+
+        // Verifica explicitamente o conteúdo inicial dos dados decodificados
+        if ($decodedStatement && (str_starts_with($decodedStatement, '<svg') || str_starts_with($decodedStatement, '<?xml'))) {
+            // SVG embutido
+            echo '<div class="w-full overflow-auto">' . $decodedStatement . '</div>';
+        } elseif ($decodedStatement && str_starts_with($decodedStatement, "\x89PNG")) {
+            // PNG embutido
+            echo '<img class="w-full max-h-80 object-contain" src="data:image/png;base64,' . Html::encode($model->statement) . '" alt="Statement Image"/>';
+        } else {
+            // Texto puro
+            echo '<p class="text-xs text-normal max-lines-4">' . nl2br(Html::encode($model->statement)) . '</p>';
+        }
+        ?>
     </div>
 
     <div class="px-2 py-2">
@@ -67,4 +77,3 @@ $this->registerCss(<<<CSS
   overflow: hidden;
 }
 CSS, [], '_question');
-?>

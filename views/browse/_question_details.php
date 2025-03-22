@@ -10,13 +10,32 @@ use yii\helpers\Html;
 
 HtmxAsset::register($this);
 
-// Substitui [imagem] pelo HTML da imagem
-$statement = Html::encode($question->statement);
-if (!empty($question->images)) {
+// Tratamento correto do Statement
+$decodedStatement = base64_decode($question->statement, true);
+
+if ($decodedStatement && (str_starts_with(trim($decodedStatement), '<svg') || str_starts_with(trim($decodedStatement), '<?xml'))) {
+    $statement = '<div class="w-full overflow-auto">' . $decodedStatement . '</div>';
+} elseif ($decodedStatement && str_starts_with($decodedStatement, "\x89PNG")) {
+    $statement = '<img class="max-w-full max-h-80 object-contain" src="data:image/png;base64,' . Html::encode($question->statement) . '" alt="Statement Image"/>';
+} elseif (!empty($question->images)) {
+    $statement = $decodedStatement ?: $question->statement;
     foreach (json_decode($question->images, true) as $image) {
         $imgTag = '<div class="my-2"><img src="' . Yii::getAlias('@web/imgs/') . basename(Html::encode($image)) . '" alt="Imagem da questão" class="rounded w-full"/></div>';
         $statement = preg_replace('/\\[imagem\\]/', $imgTag, $statement, 1);
     }
+} else {
+    $statement = '<p class="text-sm text-gray-700 dark:text-white">' . nl2br(Html::encode($question->statement)) . '</p>';
+}
+
+// Tratamento correto da Question
+$decodedQuestion = base64_decode($question->question, true);
+
+if ($decodedQuestion && (str_starts_with(trim($decodedQuestion), '<svg') || str_starts_with(trim($decodedQuestion), '<?xml'))) {
+    $questionContent = '<div class="w-full overflow-auto">' . $decodedQuestion . '</div>';
+} elseif ($decodedQuestion && str_starts_with($decodedQuestion, "\x89PNG")) {
+    $questionContent = '<img class="max-w-full max-h-80 object-contain" src="data:image/png;base64,' . Html::encode($question->question) . '" alt="Question Image"/>';
+} else {
+    $questionContent = '<p class="text-sm font-semibold text-gray-800 dark:text-gray-200">' . nl2br(Html::encode($question->question)) . '</p>';
 }
 ?>
 
@@ -46,22 +65,19 @@ if (!empty($question->images)) {
     </div>
     <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700"/>
     <div class="flex flex-col gap-2 px-4 py-1">
-        <!-- Statement com imagem inserida -->
-        <p class="text-sm text-gray-700 tracking-tight dark:text-white">
+        <div class="text-sm text-gray-700 tracking-tight dark:text-white">
             <?= $statement ?>
-        </p>
+        </div>
 
-        <!-- Bibliography -->
         <?php if (!empty($question->bibliography)): ?>
             <p class="text-xs italic text-gray-500 dark:text-gray-400">
                 <?= Html::encode($question->bibliography) ?>
             </p>
         <?php endif; ?>
 
-        <!-- Question -->
-        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-            <?= Html::encode($question->question) ?>
-        </p>
+        <div class="mt-2">
+            <?= $questionContent ?>
+        </div>
     </div>
     <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700"/>
     <div class="flex flex-col w-full px-2 py-2">
