@@ -40,7 +40,7 @@ print(f"✅ Imagem gerada com tamanho: {image_width}x{image_height} pixels")
 # 🔹 2️⃣ Carregar modelo YOLOv8 treinado
 model = YOLO(model_path)
 
-results = model(image_path, conf=0.14)
+results = model(image_path, conf=0.4)
 
 
 # 🔹 Processar detecções

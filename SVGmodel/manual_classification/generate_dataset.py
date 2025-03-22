@@ -12,7 +12,7 @@ labels_folder = os.path.join(output_folder, "labels")
 output_json_path = os.path.join(output_folder, "classified_data.json")
 
 start_page = 7  # Página inicial
-num_pages = 10  # Número de páginas a classificar
+num_pages = 57  # Número de páginas a classificar
 dpi = 72  # 1 ponto = 1 pixel
 
 # Criar diretórios de saída

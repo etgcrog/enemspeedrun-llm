@@ -2,7 +2,7 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 
 # Carregar modelo treinado
-model_path = "modelo_enem"
+model_path = "BERT\modelo_bibliografia"
 tokenizer = BertTokenizer.from_pretrained(model_path)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

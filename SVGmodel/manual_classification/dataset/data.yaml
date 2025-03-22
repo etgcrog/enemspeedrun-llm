@@ -1,5 +1,12 @@
 path: C:/Users/etgcr/enemspeedrun-llm/SVGmodel/manual_classification/dataset
 train: C:/Users/etgcr/enemspeedrun-llm/SVGmodel/manual_classification/dataset/images
 val: C:/Users/etgcr/enemspeedrun-llm/SVGmodel/manual_classification/dataset/images
-nc: 7
-names: ["enunciado", "pergunta", "alternativa_a", "alternativa_b", "alternativa_c", "alternativa_d", "alternativa_e"]
+
+names:
+  0: enunciado
+  1: pergunta
+  2: alternativa_a
+  3: alternativa_b
+  4: alternativa_c
+  5: alternativa_d
+  6: alternativa_e

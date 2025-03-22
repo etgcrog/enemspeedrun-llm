@@ -1,0 +1,86 @@
+{
+    "alternativa_a": [
+        {
+            "bbox": [
+                143,
+                428,
+                369,
+                541
+            ],
+            "svg_path": "detected_subareas\\alternativa_a_0.svg",
+            "conf": 0.9589586853981018
+        }
+    ],
+    "alternativa_d": [
+        {
+            "bbox": [
+                148,
+                778,
+                381,
+                881
+            ],
+            "svg_path": "detected_subareas\\alternativa_d_1.svg",
+            "conf": 0.9305318593978882
+        }
+    ],
+    "enunciado": [
+        {
+            "bbox": [
+                143,
+                56,
+                709,
+                391
+            ],
+            "svg_path": "detected_subareas\\enunciado_2.svg",
+            "conf": 0.9278534650802612
+        }
+    ],
+    "alternativa_b": [
+        {
+            "bbox": [
+                143,
+                548,
+                383,
+                649
+            ],
+            "svg_path": "detected_subareas\\alternativa_b_3.svg",
+            "conf": 0.8895711302757263
+        }
+    ],
+    "alternativa_e": [
+        {
+            "bbox": [
+                147,
+                891,
+                376,
+                993
+            ],
+            "svg_path": "detected_subareas\\alternativa_e_4.svg",
+            "conf": 0.8877391815185547
+        }
+    ],
+    "alternativa_c": [
+        {
+            "bbox": [
+                149,
+                660,
+                373,
+                764
+            ],
+            "svg_path": "detected_subareas\\alternativa_c_5.svg",
+            "conf": 0.8373499512672424
+        }
+    ],
+    "pergunta": [
+        {
+            "bbox": [
+                137,
+                382,
+                661,
+                414
+            ],
+            "svg_path": "detected_subareas\\pergunta_6.svg",
+            "conf": 0.7965527176856995
+        }
+    ]
+}
