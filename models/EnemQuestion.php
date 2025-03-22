@@ -49,14 +49,12 @@ class EnemQuestion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['alternatives', 'bibliography', 'images'], 'string'],
+            [['alternatives', 'bibliography', 'images', 'statement', 'question'], 'string'],
             [['position', 'answer', 'difficulty', 'exam_code', 'year'], 'required'],
             [['position', 'enem_area_competence_skill_id', 'exam_code', 'year', 'language'], 'integer'],
             [['difficulty'], 'number'],
             [['created_date', 'updated_date'], 'safe'],
             [['title'], 'string', 'max' => 620],
-            [['statement'], 'string', 'max' => 10000],
-            [['question'], 'string', 'max' => 10000],
             [['answer'], 'string', 'max' => 1],
             [['enem_area_competence_skill_id'], 'exist', 'skipOnError' => true, 'targetClass' => EnemAreaCompetenceSkill::class, 'targetAttribute' => ['enem_area_competence_skill_id' => 'id']],
         ];

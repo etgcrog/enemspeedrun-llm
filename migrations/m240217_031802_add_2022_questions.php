@@ -13,18 +13,24 @@ class m240217_031802_add_2022_questions extends Migration
      */
     public function safeUp()
     {
+        // Correção aqui, usando text() para LONGTEXT
+        $this->alterColumn('{{%enem_question}}', 'statement', $this->text());
+        $this->alterColumn('{{%enem_question}}', 'question', $this->text());
+        $this->alterColumn('{{%enem_question}}', 'alternatives', $this->text());
+
         $competencies = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\question_levels.json'), true);
-        $questions = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\questoes_enem_2022_ML.json'), true);
+        $questionsHumanas = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\questoes_enem_2022_humanas.json'), true);
+        $questionsExatas = json_decode(file_get_contents('C:\\Users\\etgcr\\enemspeedrun-llm\\raw\\2022\\questoes_enem_2022_exatas.json'), true);
+
+        $questions = array_merge($questionsHumanas, $questionsExatas);
 
         $questions_map = [];
         foreach ($questions as $q) {
-            $questions_map[$q['numero']] = $q;
+            $questions_map[str_pad((string) intval($q['numero']), 3, '0', STR_PAD_LEFT)] = $q;
         }
 
         foreach ($competencies as $question) {
-            
-            // Corrigido aqui!
-            $numero = str_pad((string) intval($question[0]), 2, '0', STR_PAD_LEFT);
+            $numero = str_pad((string) intval($question[0]), 3, '0', STR_PAD_LEFT);
 
             if (!isset($questions_map[$numero])) {
                 continue;
@@ -32,7 +38,7 @@ class m240217_031802_add_2022_questions extends Migration
 
             $question_data = $questions_map[$numero];
 
-            // Evita duplicação (se desejar, pode comentar para testar)
+            // Evita duplicação
             $existing = EnemQuestion::find()
                 ->where(['position' => $question[0], 'year' => 2022])
                 ->exists();

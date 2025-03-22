@@ -4,7 +4,7 @@ import json
 csv_file_path = r'C:\Users\etgcr\enemspeedrun-llm\raw\2022\ITENS_PROVA_2022.csv'
 json_file_path = r'C:\Users\etgcr\enemspeedrun-llm\raw\2022\question_levels.json'
 
-provas_desejadas = {'1179', '1175'}
+provas_desejadas = {'1179', '1175', '1187', '1183'}
 
 result = [["CO_POSICAO","SG_AREA","TX_GABARITO","CO_HABILIDADE","NU_PARAM_B","CO_PROVA","TP_LINGUA"]]
 
