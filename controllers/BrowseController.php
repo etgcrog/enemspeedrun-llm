@@ -143,25 +143,36 @@ class BrowseController extends WebController
     {
         $this->setupSearchForm();
         $question = EnemQuestion::getEnemQuestionById($id);
-
         $commentsDataProvider = $this->getCommentsDataProvider();
-
+        $answerForm = $this->getAnswerForm($question);
+        $commentForm = $this->getCommentForm($question);
+    
+        if (Yii::$app->request->isAjax && !Yii::$app->request->headers->has('HX-Request')) {
+            // Agora retornando questão E alternativas juntos:
+            return $this->renderPartial('_question_and_alternatives', [
+                'question' => $question,
+                'answerForm' => $answerForm
+            ]);
+        }
+    
         if ($this->getIsHtmxRequest()) {
             return $this->renderAjax('view', [
-                'answerForm' => $this->getAnswerForm($question),
+                'answerForm' => $answerForm,
                 'question' => $question,
-                'commentForm' => $this->getCommentForm($question),
+                'commentForm' => $commentForm,
                 'commentsDataProvider' => $commentsDataProvider
             ]);
         }
-
+    
         return $this->render('view', [
-            'answerForm' => $this->getAnswerForm($question),
+            'answerForm' => $answerForm,
             'question' => $question,
-            'commentForm' => $this->getCommentForm($question),
+            'commentForm' => $commentForm,
             'commentsDataProvider' => $commentsDataProvider
         ]);
     }
+    
+    
 
     /**
      * Página de resposta.
