@@ -10,8 +10,8 @@ HtmxAsset::register($this);
 ?>
 
 <div class="max-w-3xl mx-auto p-4" x-data="quizData()">
-    <div class="text-lg font-semibold mb-4">
-        Quiz - Questão <span x-text="currentIndex + 1"></span> de <?= count($questions) ?>
+    <div class="text-lg font-semibold mb-4" x-show="!finished">
+        Questão <span x-text="currentIndex + 1"></span> de <?= count($questions) ?>
     </div>
 
     <div id="quiz-container"
@@ -22,23 +22,20 @@ HtmxAsset::register($this);
         Carregando primeira questão...
     </div>
 
-    <div class="flex justify-between gap-2 mt-4">
-        <button id="prev-btn"
-                class="py-2 px-4 bg-gray-300 rounded disabled:opacity-50"
+    <div class="flex justify-between gap-2 mt-4" x-show="!finished">
+        <button class="py-2 px-4 bg-gray-300 rounded disabled:opacity-50"
                 :disabled="currentIndex === 0"
                 @click="prevQuestion()">
             Anterior
         </button>
-        <button id="next-btn"
-                class="py-2 px-4 bg-gray-300 rounded disabled:opacity-50"
-                :disabled="currentIndex >= questions.length - 1"
+        <button class="py-2 px-4 bg-gray-300 rounded disabled:opacity-50"
                 @click="nextQuestion()">
-            Próxima
+            <span x-text="currentIndex < questions.length - 1 ? 'Próxima' : 'Finalizar Quiz'"></span>
         </button>
     </div>
 
     <div x-show="finished" class="mt-6 bg-green-200 p-4 rounded shadow text-center">
-        Você acertou <strong x-text="correctAnswers"></strong> de <strong><?= count($questions) ?></strong> questões.
+        🎉 Você acertou <strong x-text="correctAnswers"></strong> de <strong><?= count($questions) ?></strong> questões!
     </div>
 </div>
 
@@ -60,7 +57,6 @@ HtmxAsset::register($this);
             },
 
             loadQuestion(index) {
-                this.finished = false;
                 const container = document.getElementById('quiz-container');
                 container.setAttribute('hx-get', '<?= Url::to(['/browse/view']) ?>?id=' + this.questions[index]);
                 htmx.process(container);
@@ -72,7 +68,7 @@ HtmxAsset::register($this);
                     this.currentIndex++;
                     this.loadQuestion(this.currentIndex);
                 } else {
-                    this.showResults();
+                    this.finished = true;
                 }
             },
 
@@ -84,22 +80,37 @@ HtmxAsset::register($this);
             },
 
             attachAnswerListener() {
-                const quizContainer = document.getElementById('quiz-container');
-                quizContainer.querySelectorAll('form').forEach(form => {
-                    form.addEventListener('htmx:afterSwap', (event) => {
-                        const isCorrect = event.detail.xhr.response.includes('Resposta correta');
-                        const questionId = this.questions[this.currentIndex];
-                        if (!(questionId in this.answers)) {
-                            this.answers[questionId] = isCorrect;
-                            if (isCorrect) this.correctAnswers++;
-                        }
+                document.querySelectorAll('#quiz-container form').forEach(form => {
+                    form.addEventListener('submit', event => {
+                        event.preventDefault();
+                        const formData = new FormData(form);
+                        fetch(form.getAttribute('hx-post'), {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-Token': formData.get('_csrf'),
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'HX-Request': 'true',
+                            },
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const questionId = this.questions[this.currentIndex];
+
+                            if (!(questionId in this.answers)) {
+                                this.answers[questionId] = data.is_correct;
+                                if (data.is_correct) this.correctAnswers++;
+                            }
+
+                            if (data.is_correct) {
+                                alert('🎉 Resposta correta!');
+                            } else {
+                                alert(`😢 Incorreto! Resposta certa: ${data.correct_answer}`);
+                            }
+                        });
                     });
                 });
             },
-
-            showResults() {
-                this.finished = true;
-            }
         };
     }
 </script>

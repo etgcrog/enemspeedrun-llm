@@ -181,22 +181,53 @@ class BrowseController extends WebController
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionAnswer(int $id)
+    public function actionAnswer(int $id, bool $json = false)
     {
+        if ($json) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        }
+    
         if (!$this->getIsHtmxRequest()) {
+            if ($json) {
+                return [
+                    'error' => true,
+                    'message' => "Request inválido (HTMX header missing).",
+                ];
+            }
             throw new BadRequestHttpException("Request inválido.");
         }
-
-        $question = EnemQuestion::getEnemQuestionById($id);
-        $this->setupSearchForm();
-        $answerForm = $this->getAnswerForm($question);
-        $answerForm->answer();
-
-        return $this->renderAjax('_alternatives', [
-            'question' => $question,
-            'answerForm' => $answerForm
-        ]);
+    
+        try {
+            $question = EnemQuestion::getEnemQuestionById($id);
+            $this->setupSearchForm();
+            $answerForm = $this->getAnswerForm($question);
+            $answerForm->answer();
+    
+            if ($json) {
+                return [
+                    'is_correct' => $answerForm->is_correct,
+                    'correct_answer' => $question->answer,
+                ];
+            }
+    
+            return $this->renderAjax('_alternatives', [
+                'question' => $question,
+                'answerForm' => $answerForm
+            ]);
+        } catch (\Throwable $e) {
+            Yii::error($e->getMessage());
+            if ($json) {
+                return [
+                    'error' => true,
+                    'message' => $e->getMessage(),
+                ];
+            }
+    
+            throw $e;
+        }
     }
+    
+    
 
     /**
      * Página parcial de comentários.
